@@ -1,0 +1,4 @@
+About
+=====
+* This is my homepage under django. _It's a mess._
+* BSD-licensed code, GFDL-licensed content (whatever's in this repository)
