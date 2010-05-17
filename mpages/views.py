@@ -11,6 +11,14 @@ def index(request):
 
 def view_page(request, page_name):
 	# TODO: This is messy and insecure!
+	# TODO: Need to filter page_name (Even though urls.py only allows \W-.)
+
+	def linkToTitle(link):
+		"""Heuristic for turning a link into a title, 
+		eg. /some-document/subdocument into a "Some Document > Subdocument"""
+		title = string.replace(link, '/', ' > ')
+		title = string.replace(title, '-', ' ')
+		return string.capwords(title)
 
 	locPart = '/markdown-docs'
 	cachePart = '/markdown-cache'
@@ -34,20 +42,23 @@ def view_page(request, page_name):
 		path = basePath + locPart + '/' + str(page_name) + '/index.mkd'
 		githubUrl = githubBase + '/' + str(page_name) + '/index.mkd'
 
-	print path
-
 	if not os.path.exists(path):
 		raise Http404
 
+	# Generate back navigation
+	parts = page_name.split('/')
+	backnav = []
+	for i in range(len(parts)):
+		ln = "/docs/"
+		for j in range(i+1):
+			ln += parts[j] + "/"
+		backnav.append({'link':ln, 'title': linkToTitle(parts[i])})
+
+	if len(backnav) <= 1:
+		backnav = None
+
 	# TODO: @title directive. 
-	title = None
-	
-
-	#page_name.split('/')
-
-	title = string.replace(page_name, '/', ' > ')
-	title = string.replace(title, '-', ' ')
-	title = string.capwords(title)
+	title = linkToTitle(page_name)
 
 	x = readfile(path)
 	x = markdown.markdown(x)
@@ -60,7 +71,8 @@ def view_page(request, page_name):
 									'title':	title,
 									'content':	x,
 									'editdate':	editstr,
-									'githubUrl': githubUrl
+									'githubUrl': githubUrl,
+									'backnav': backnav,
 								}, 
 							  	mimetype='application/xhtml+xml')
 

@@ -49,12 +49,37 @@
 				</div>
 
 				<div id="box">
-					{{ content|safe }}
+					{% if backnav %}
+					<div class="backnav">
+						{% for x in backnav %}
+							{% if not forloop.last %}
+								<a href="{{ x.link }}">{{ x.title }}</a> &gt; 
+							{% else %}
+								{{ x.title }}
+							{% endif %}
+						{% endfor %}
+					</div>
+					{% endif %}
+					<div id="content">
+						{{ content|safe }}
+					</div>
+					<div id="footer">
+						{% if backnav %}
+						<div class="backnav">
+							{% for x in backnav %}
+								{% if not forloop.last %}
+									<a href="{{ x.link }}">{{ x.title }}</a> &gt; 
+								{% else %}
+									{{ x.title }}
+								{% endif %}
+							{% endfor %}
+						</div>
+						{% endif %}
+						<span class="editdate">Document last edited on {{ editdate }}. Revisions at <a href="{{ githubUrl }}">github</a>.</span>
+						<br />
+						<br />
+					</div>
 				</div>
-				<br />
-				<span class="editdate">Document last edited on {{ editdate }}. Revisions at <a href="{{ githubUrl }}">github</a>.</span>
-				<br />
-				<br />
 			</div>
 		</div>
 	</body>
