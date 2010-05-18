@@ -6,19 +6,39 @@ import time
 import string
 import markdown2 as markdown
 
+def linkToTitle(link):
+	"""Heuristic for turning a link into a title, 
+	eg. /some-document/subdocument into a "Some Document > Subdocument"""
+	title = string.replace(link, '/', ' > ')
+	title = string.replace(title, '-', ' ')
+	return string.capwords(title)
+
 def index(request):
-	return HttpResponse(os.getcwd())
+	"""Lists all of the markdown document directories."""
+
+	path = ''
+	if settings.DEBUG:
+		path = '/home/brandon/Dev/possibilistic.org/markdown-docs'
+	else:
+		path = '/home/possibilistic/possibilistic.org/markdown-docs'
+
+	paths = os.listdir(path)
+	dirs = []
+
+	for p in paths:
+		if p[0:1] == '.':
+			continue
+		print p
+		if os.path.isdir(path + '/' + p):
+			dirs.append({'path': p, 'title':linkToTitle(p)})
+
+	return render_to_response('markdown-docindex.html',
+								{'dirs': dirs},
+							  	mimetype='application/xhtml+xml')
 
 def view_page(request, page_name):
 	# TODO: This is messy and insecure!
 	# TODO: Need to filter page_name (Even though urls.py only allows \W-.)
-
-	def linkToTitle(link):
-		"""Heuristic for turning a link into a title, 
-		eg. /some-document/subdocument into a "Some Document > Subdocument"""
-		title = string.replace(link, '/', ' > ')
-		title = string.replace(title, '-', ' ')
-		return string.capwords(title)
 
 	locPart = '/markdown-docs'
 	cachePart = '/markdown-cache'
@@ -67,7 +87,7 @@ def view_page(request, page_name):
 	t = time.localtime(int(d.st_mtime))
 	editstr = time.strftime("%B %d, %Y", t)
 
-	return render_to_response('markdown-base.html', {
+	return render_to_response('markdown-page.html', {
 									'title':	title,
 									'content':	x,
 									'editdate':	editstr,

@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+<!-- Title -->
+{% block title %}Document Index / {% endblock %}
+
+<!-- Main info -->
+{% block content %}
+
+	<p>This is a list of the documents in my repository of markdown documents. 
+	<small>(I just built this facility, so it's crude at present!)</small> These
+	documents are written in plaintext/markdown, with version control under git, and
+	hosted via Python/Django.</p>
+
+	<p>When the code for this project is mature, it will be hosted as a separate
+	Django application apart from my website source control.</p>
+
+	{% if not dirs %}
+		<p>There are no documents/directories.</p>
+	{% else %}
+		<ul>
+		{% for dir in dirs %}
+			<li>
+				<a href="/docs/{{ dir.path }}/">{{ dir.title }}</a>
+			</li>
+		{% endfor %}
+		</ul>
+	{% endif %}
+
+{% endblock %}
+

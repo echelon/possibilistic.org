@@ -10,7 +10,7 @@
 			under the GFDL.
 		-->
 		<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
-		<title>{%if title %}{{ title }}{% else %}Untitled{% endif %} / possibilistic.org</title>
+		<title>{% block title %}{% endblock %} possibilistic.org</title>
 
 		<link rel="meta" type="application/rdf+xml" title="FOAF" 
 						 href="/meta/profile.rdf" />
@@ -34,6 +34,7 @@
 
 			<div id="main">
 
+				<!-- Header -->
 				<div id="header">
 					<span id="logo">
 						<img src="/theme/img/possibilistic-mini.png" 
@@ -49,36 +50,20 @@
 				</div>
 
 				<div id="box">
-					{% if backnav %}
-					<div class="backnav">
-						{% for x in backnav %}
-							{% if not forloop.last %}
-								<a href="{{ x.link }}">{{ x.title }}</a> &gt; 
-							{% else %}
-								{{ x.title }}
-							{% endif %}
-						{% endfor %}
-					</div>
-					{% endif %}
+					{% block backnav %}{% endblock %}
 					<div id="content">
-						{{ content|safe }}
+						{% block content %}{% endblock %}
 					</div>
+
+					<!-- Footer -->
 					<div id="footer">
-						{% if backnav %}
-						<div class="backnav">
-							{% for x in backnav %}
-								{% if not forloop.last %}
-									<a href="{{ x.link }}">{{ x.title }}</a> &gt; 
-								{% else %}
-									{{ x.title }}
-								{% endif %}
-							{% endfor %}
-						</div>
-						{% endif %}
-						<span class="editdate">Document last edited on {{ editdate }}. Revisions at <a href="{{ githubUrl }}">github</a>.</span>
+						{% block backnav2 %}{% endblock %}
+						{% block editinfo %}{% endblock %}
 						<br />
 						<br />
 					</div>
+
+
 				</div>
 			</div>
 		</div>

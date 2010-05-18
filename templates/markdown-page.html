@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+<!-- Title -->
+{% block title %}{%if title %}{{ title }}{% else %}Untitled{% endif %} / {% endblock %}
+
+<!-- Markdown backnavigation -->
+{% block backnav %}
+		{% if backnav %}
+		<div class="backnav">
+			{% for x in backnav %}
+				{% if not forloop.last %}
+					<a href="{{ x.link }}">{{ x.title }}</a> &gt; 
+				{% else %}
+					{{ x.title }}
+				{% endif %}
+			{% endfor %}
+		</div>
+		{% endif %}
+{% endblock %}
+
+<!-- Main info -->
+{% block content %}
+		{{ content|safe }}
+{% endblock %}
+
+{% block backnav2 %}
+		{% if backnav %}
+		<div class="backnav">
+			{% for x in backnav %}
+				{% if not forloop.last %}
+					<a href="{{ x.link }}">{{ x.title }}</a> &gt; 
+				{% else %}
+					{{ x.title }}
+				{% endif %}
+			{% endfor %}
+		</div>
+		{% endif %}
+{% endblock %}
+
+<!-- Markdown Edit Info -->
+{% block editinfo %}
+	<span class="editdate">Document last edited on {{ editdate }}. 
+		Revisions at <a href="{{ githubUrl }}">github</a>.</span>
+{% endblock %}
+
